@@ -1,0 +1,36 @@
+name: Env Context Demo
+
+on:
+  workflow_dispatch:
+
+env:
+  STAGE: test
+  APP_NAME: DevRickMortyApp
+
+jobs:
+  context_demo:
+    runs-on: ubuntu-latest
+    env:
+      STAGE: qa
+      JOB_LEVEL_VAR: job-scope
+
+    steps:
+      - name: Show workflow and job context
+        run: |
+          echo "Usuário que acionou: ${{ github.actor }}"
+          echo "Sistema operacional do runner: ${{ runner.os }}"
+          echo "APP_NAME: $APP_NAME"
+          echo "STAGE atual: $STAGE"
+          echo "JOB_LEVEL_VAR: $JOB_LEVEL_VAR"
+
+      - name: Override variable at step level
+        env:
+          STAGE: test
+          STEP_LEVEL_VAR: step-scope
+        run: |
+          echo "Usuário que acionou: ${{ github.actor }}"
+          echo "Sistema operacional do runner: ${{ runner.os }}"
+          echo "APP_NAME: $APP_NAME"
+          echo "STAGE no step: $STAGE"
+          echo "JOB_LEVEL_VAR: $JOB_LEVEL_VAR"
+          echo "STEP_LEVEL_VAR: $STEP_LEVEL_VAR"

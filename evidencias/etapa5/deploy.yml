@@ -1,0 +1,50 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  deploy_dev:
+    if: github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Simulate deploy to dev
+        run: |
+          echo "Realizando deploy no ambiente DEV"
+          echo "Destino do deploy: ${{ vars.DEPLOY_TARGET }}"
+          echo "Branch atual: ${{ github.ref_name }}"
+
+  deploy_prod:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: prod
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Simulate deploy to prod
+        env:
+          PROD_DEPLOY_TOKEN: ${{ secrets.PROD_DEPLOY_TOKEN }}
+        run: |
+          echo "Iniciando deploy no ambiente PROD"
+          echo "Branch atual: ${{ github.ref_name }}"
+
+          if [ -z "$PROD_DEPLOY_TOKEN" ]; then
+            echo "Secret PROD_DEPLOY_TOKEN não configurado"
+            exit 1
+          fi
+
+          echo "Token de produção disponível após aprovação do environment"
+          echo "Deploy em produção simulado com sucesso"
