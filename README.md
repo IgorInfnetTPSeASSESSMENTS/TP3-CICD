@@ -4,5 +4,5 @@ Durante o desenvolvimento da pipeline, foi provocado intencionalmente um erro em
 
 As ferramentas da interface do GitHub utilizadas nesse processo foram a aba **Actions**, a visualização detalhada da execução do workflow, os logs de cada step e o histórico das execuções. Esses recursos permitiram acompanhar exatamente em qual etapa o erro aconteceu e qual mensagem foi retornada pelo runner.
 
-Após identificar a causa, o comando incorreto foi corrigido no arquivo do workflow e um novo push foi realizado no repositório. Na execução seguinte, o pipeline foi concluído com sucesso, confirmando que o problema havia sido resolvido corretamente.
+Após identificar a causa, o comando incorreto foi corrigido no arquivo do workflow e um novo push foi realizado no repositório. Na execução seguinte, o pipeline foi concluído com sucesso, confirmando que o problema havia sido resolvido corretamente...
 
