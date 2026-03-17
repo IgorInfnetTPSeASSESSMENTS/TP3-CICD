@@ -1,0 +1,43 @@
+name: GITHUB_TOKEN Issue Demo
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  validate_and_open_issue:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate required variable
+        id: check_var
+        run: |
+          if [ -z "${{ vars.SUPPORT_EMAIL }}" ]; then
+            echo "missing=true" >> "$GITHUB_OUTPUT"
+            echo "A variável SUPPORT_EMAIL não está configurada."
+          else
+            echo "missing=false" >> "$GITHUB_OUTPUT"
+            echo "SUPPORT_EMAIL configurada: ${{ vars.SUPPORT_EMAIL }}"
+          fi
+
+      - name: Create issue automatically
+        if: steps.check_var.outputs.missing == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            https://api.github.com/repos/${{ github.repository }}/issues \
+            -d '{
+              "title": "Variável SUPPORT_EMAIL ausente",
+              "body": "O workflow detectou que a variável SUPPORT_EMAIL não foi configurada no repositório. Verifique Settings > Secrets and variables > Actions."
+            }'
+
+      - name: No issue needed
+        if: steps.check_var.outputs.missing == 'false'
+        run: echo "Nenhuma issue foi criada porque a variável obrigatória existe."
