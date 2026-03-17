@@ -1,0 +1,22 @@
+name: Self-Hosted Runner Demo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  runner_test:
+    runs-on: self-hosted
+
+    steps:
+      - name: Show system info
+        run: |
+          uname -a
+          java -version
+
+      - name: Install additional software
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tree
+
+      - name: Validate installation
+        run: tree --version
